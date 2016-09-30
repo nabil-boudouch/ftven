@@ -1,0 +1,4 @@
+services:
+#    ftv_api.example:
+#        class: FTV\ApiBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
