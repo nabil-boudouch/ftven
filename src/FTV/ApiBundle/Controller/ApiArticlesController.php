@@ -2,6 +2,8 @@
 
 namespace FTV\ApiBundle\Controller;
 
+use FTV\ApiBundle\Entity\Article;
+use FTV\ApiBundle\Form\ArticleType;
 use Hateoas\HateoasBuilder;
 use Hateoas\Representation\Factory\PagerfantaFactory;
 use JMS\Serializer\SerializationContext;
@@ -10,6 +12,8 @@ use Pagerfanta\Pagerfanta;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Exception\InvalidArgumentException;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -66,15 +70,52 @@ class ApiArticlesController extends Controller
         ));
     }
 
-    protected function serialize($data, $format = 'json')
+
+    /**
+     * @Route("/api/articles", name="api_create_articles")
+     * @Method("POST")
+     */
+    public function createAction(Request $request)
     {
-        $context = new SerializationContext();
-        $context->setSerializeNull(true);
+        $article = new Article();
+        $form = $this->createForm(new ArticleType(), $article);
+        $this->processForm($request, $form);
 
+        if ($form->isValid()) {
+            $article->setCreatedBy('Auteur');
 
-        return $this->container->get('jms_serializer')
-            ->serialize($data, $format, $context);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($article);
+            $em->flush();
+
+            $response = $this->createResponse($article, 201);
+            $url = $this->generateUrl('api_show_article', array('slug' => $article->getSlug()));
+
+            $response->headers->set('location', $url);
+
+            return $response;
+        }
+
     }
 
 
-}
+
+      protected  function serialize($data, $format = 'json')
+        {
+            $context = new SerializationContext();
+            $context->setSerializeNull(true);
+
+
+            return $this->container->get('jms_serializer')
+                ->serialize($data, $format, $context);
+        }
+
+       protected function processForm(Request $request, FormInterface $form)
+        {
+            $data = json_decode($request->getContent(), true);
+
+
+            $form->submit($data);
+        }
+
+    }

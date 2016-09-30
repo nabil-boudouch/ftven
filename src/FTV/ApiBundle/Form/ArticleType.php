@@ -36,7 +36,9 @@ class ArticleType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'FTV\ApiBundle\Entity\Article'
+            'data_class' => 'FTV\ApiBundle\Entity\Article',
+            'csrf_protection' => false,
+
         ));
     }
 
@@ -45,6 +47,6 @@ class ArticleType extends AbstractType
      */
     public function getName()
     {
-        return 'ftv_apibundle_article';
+        return 'article';
     }
 }
