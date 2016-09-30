@@ -99,23 +99,40 @@ class ApiArticlesController extends Controller
     }
 
 
+    /**
+     * @Route("/api/articles/{slug}",  name="api_delete_article")
+     * @Method("DELETE")
+     */
+    public function deleteAction($slug)
+    {
+        $article = $this->getDoctrine()->getRepository('FTVApiBundle:Article')->findOneBy(array(
+            'slug' => $slug));
 
-      protected  function serialize($data, $format = 'json')
-        {
-            $context = new SerializationContext();
-            $context->setSerializeNull(true);
-
-
-            return $this->container->get('jms_serializer')
-                ->serialize($data, $format, $context);
+        if ($article) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($article);
+            $em->flush();
         }
 
-       protected function processForm(Request $request, FormInterface $form)
-        {
-            $data = json_decode($request->getContent(), true);
-
-
-            $form->submit($data);
-        }
-
+        return new Response(null, 204);
     }
+
+    protected function serialize($data, $format = 'json')
+    {
+        $context = new SerializationContext();
+        $context->setSerializeNull(true);
+
+
+        return $this->container->get('jms_serializer')
+            ->serialize($data, $format, $context);
+    }
+
+    protected function processForm(Request $request, FormInterface $form)
+    {
+        $data = json_decode($request->getContent(), true);
+
+
+        $form->submit($data);
+    }
+
+}
