@@ -5,3 +5,9 @@ ftv_api_article:
 ftv_api_homepage:
     path:     /hello/{name}
     defaults: { _controller: FTVApiBundle:Default:index }
+
+ftv_api:
+    resource: "@FTVApiBundle/Controller"
+    type:     annotation
+    defaults:
+        _format: json

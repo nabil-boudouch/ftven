@@ -4,12 +4,15 @@ namespace FTV\ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraint as Assert;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Article
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="FTV\ApiBundle\Entity\ArticleRepository")
+ * @Serializer\ExclusionPolicy("all")
  */
 class Article
 {
@@ -26,6 +29,7 @@ class Article
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=150)
+     * @Serializer\Expose
      */
     private $title;
 
@@ -33,6 +37,8 @@ class Article
      * @var string
      *
      * @ORM\Column(name="_leading", type="string", nullable=true)
+     *
+     * @Serializer\Expose
      */
     private $leading;
 
@@ -40,6 +46,8 @@ class Article
      * @var string
      *
      * @ORM\Column(name="body", type="string", nullable=true)
+     *
+     * @Serializer\Expose
      */
     private $body;
 
@@ -48,18 +56,22 @@ class Article
      *
      * @ORM\Column(name="createdAt", type="datetime")
      * @Gedmo\Timestampable(on="create")
+     * @Serializer\Expose
      */
     private $createdAt;
 
     /**
      * @Gedmo\Blameable(on="create")
      * @ORM\Column(type="string")
+     * @Serializer\Expose
+     *
      */
     private $createdBy;
 
     /**
      * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(type="string", unique=true)
+     * @Serializer\Expose
      */
 
     private $slug;
