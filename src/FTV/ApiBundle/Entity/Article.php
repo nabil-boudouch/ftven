@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraint as Assert;
 use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
+
 
 /**
  * Article
@@ -13,6 +15,7 @@ use JMS\Serializer\Annotation as Serializer;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="FTV\ApiBundle\Entity\ArticleRepository")
  * @Serializer\ExclusionPolicy("all")
+ * @Hateoas\Relation("self", href = "expr('/api/articles/' ~ object.getSlug())")
  */
 class Article
 {

@@ -2,10 +2,15 @@
 
 namespace FTV\ApiBundle\Controller;
 
+use Hateoas\HateoasBuilder;
+use Hateoas\Representation\Factory\PagerfantaFactory;
 use JMS\Serializer\SerializationContext;
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiArticlesController extends Controller
@@ -31,6 +36,25 @@ class ApiArticlesController extends Controller
     }
 
 
+    /**
+     * @Route("/api/articles", name="api_list_articles")
+     * @Method("GET")
+     */
+    public function listAction()
+    {
+        $articles = $this->getDoctrine()->getRepository('FTVApiBundle:Article')->findAll();
+        $adapter = new ArrayAdapter($articles);
+        $pager = new Pagerfanta($adapter);
+
+        $pagerfantaFactory = new PagerfantaFactory();
+        $paginatedCollection = $pagerfantaFactory->createRepresentation(
+            $pager,
+            new \Hateoas\Configuration\Route('api_list_articles', array())
+        );
+
+
+        return $this->createResponse($paginatedCollection);
+    }
 
 
     protected function createResponse($data, $statusCode = 200)
