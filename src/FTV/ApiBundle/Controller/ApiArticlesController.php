@@ -4,7 +4,6 @@ namespace FTV\ApiBundle\Controller;
 
 use FTV\ApiBundle\Entity\Article;
 use FTV\ApiBundle\Form\ArticleType;
-use Hateoas\HateoasBuilder;
 use Hateoas\Representation\Factory\PagerfantaFactory;
 use JMS\Serializer\SerializationContext;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -12,7 +11,6 @@ use Pagerfanta\Pagerfanta;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
