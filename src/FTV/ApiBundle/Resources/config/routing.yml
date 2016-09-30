@@ -1,3 +1,7 @@
+ftv_api_article:
+    resource: "@FTVApiBundle/Resources/config/routing/article.yml"
+    prefix:   /article
+
 ftv_api_homepage:
     path:     /hello/{name}
     defaults: { _controller: FTVApiBundle:Default:index }
