@@ -32,14 +32,14 @@ class Article
     /**
      * @var string
      *
-     * @ORM\Column(name="_leading", type="text", nullable=true)
+     * @ORM\Column(name="_leading", type="string", nullable=true)
      */
     private $leading;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="body", type="text", nullable=true)
+     * @ORM\Column(name="body", type="string", nullable=true)
      */
     private $body;
 
@@ -52,14 +52,14 @@ class Article
     private $createdAt;
 
     /**
-     * @var string
-     * @ORM\Column(name="createdBy", type="text")
+     * @Gedmo\Blameable(on="create")
+     * @ORM\Column(type="string")
      */
     private $createdBy;
 
     /**
      * @Gedmo\Slug(fields={"title"})
-     * @ORM\Column(unique=true)
+     * @ORM\Column(type="string", unique=true)
      */
 
     private $slug;
@@ -196,5 +196,10 @@ class Article
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    public function __toString()
+    {
+        return $this->getSlug();
     }
 }
